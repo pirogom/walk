@@ -250,6 +250,15 @@ func (wv *WebView) SetURL(url string) error {
 	})
 }
 
+// PIROGOM
+// for disable javascript error alert
+func (wv *WebView) SetSilent() error {
+	return wv.withWebBrowser2(func(webBrowser2 *win.IWebBrowser2) error {
+		webBrowser2.Put_Silent(1)
+		return nil
+	})
+}
+
 func (wv *WebView) URLChanged() *Event {
 	return wv.urlChangedPublisher.Event()
 }
