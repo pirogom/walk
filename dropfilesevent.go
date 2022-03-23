@@ -27,6 +27,13 @@ type DropFilesEvent struct {
 
 func (e *DropFilesEvent) Attach(handler DropFilesEventHandler) int {
 	if len(e.handlers) == 0 {
+
+		// PIROGOM
+		// fix missing WM_DROPFILES when process has admin priviliges problem
+		win.ChangeWindowMessageFilterEx(e.hWnd, 0x0049, 0x0001, nil)
+		win.ChangeWindowMessageFilterEx(e.hWnd, win.WM_DROPFILES, 0x0001, nil)
+		//
+
 		win.DragAcceptFiles(e.hWnd, true)
 	}
 
