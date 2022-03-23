@@ -1,0 +1,27 @@
+﻿
+1 VERSIONINFO
+FILEVERSION 1,0,0,0
+PRODUCTVERSION 1,0,0,0
+FILEOS 0x4
+FILETYPE 0x1
+{
+BLOCK "StringFileInfo"
+{
+	BLOCK "041204B0"
+	{
+		VALUE "CompanyName", "회사명"
+		VALUE "FileDescription", "파일설명"
+		VALUE "FileVersion", "1.0.0.0"
+		VALUE "InternalName", "실행파일명.exe"
+		VALUE "LegalCopyright", "(c) 카피라이트 2017-2021"
+		VALUE "ProductVersion", "1.0.0.0"
+		VALUE "ProductName", "제품명"
+	}
+}
+
+BLOCK "VarFileInfo"
+{
+	VALUE "Translation", 0x0412 0x04B0  
+}
+}
+
