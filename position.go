@@ -19,18 +19,21 @@ var (
 type PositionManager struct {
 	sync.Mutex
 	PosX, PosY, Width, Height int
+	DeskWidth, DeskHeight     int
 	updated                   bool
 }
 
 /**
 *	Update
 **/
-func (p *PositionManager) Update(x, y, w, h int) {
+func (p *PositionManager) Update(x, y, w, h, dw, dh int) {
 	p.Lock()
 	p.PosX = x
 	p.PosY = y
 	p.Width = w
 	p.Height = h
+	p.DeskWidth = dw
+	p.DeskHeight = dh
 	if !p.updated {
 		p.updated = true
 	}
@@ -38,10 +41,19 @@ func (p *PositionManager) Update(x, y, w, h int) {
 }
 
 /**
+* Clear
+**/
+func (p *PositionManager) Clear() {
+	p.Lock()
+	p.updated = false
+	p.Unlock()
+}
+
+/**
 *	Get
 **/
-func (p *PositionManager) Get() (x int, y int, w int, h int) {
-	return p.PosX, p.PosY, p.Width, p.Height
+func (p *PositionManager) Get() (x int, y int, w int, h int, dw int, dh int) {
+	return p.PosX, p.PosY, p.Width, p.Height, p.DeskWidth, p.DeskHeight
 }
 
 /**

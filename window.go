@@ -2469,7 +2469,16 @@ func (wb *WindowBase) WndProc(hwnd win.HWND, msg uint32, wParam, lParam uintptr)
 
 		// PIROGOM
 		if wp != nil {
-			PosMgr.Update(int(wp.X), int(wp.Y), int(wp.Cx), int(wp.Cy))
+			hMon := win.MonitorFromWindow(hwnd, win.MONITOR_DEFAULTTONEAREST)
+			mi := win.MONITORINFO{}
+			mi.CbSize = uint32(unsafe.Sizeof(mi))
+			if win.GetMonitorInfo(hMon, &mi) {
+				deskWidth := mi.RcWork.Left - mi.RcWork.Right
+				deskHeight := mi.RcWork.Bottom - mi.RcWork.Top
+				PosMgr.Update(int(wp.X), int(wp.Y), int(wp.Cx), int(wp.Cy), int(deskWidth), int(deskHeight))
+			} else {
+				PosMgr.Clear()
+			}
 		}
 
 		if wp.Flags&win.SWP_NOMOVE != 0 && wp.Flags&win.SWP_NOSIZE != 0 {
