@@ -7,7 +7,9 @@
 
 package walk
 
-import "sync"
+import (
+	"sync"
+)
 
 var (
 	PosMgr PositionManager
@@ -34,6 +36,7 @@ func (p *PositionManager) Update(x, y, w, h, dw, dh int) {
 	p.Height = h
 	p.DeskWidth = dw
 	p.DeskHeight = dh
+
 	if !p.updated {
 		p.updated = true
 	}
