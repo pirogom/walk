@@ -2467,6 +2467,11 @@ func (wb *WindowBase) WndProc(hwnd win.HWND, msg uint32, wParam, lParam uintptr)
 	case win.WM_WINDOWPOSCHANGED:
 		wp := (*win.WINDOWPOS)(unsafe.Pointer(lParam))
 
+		// PIROGOM
+		if wp != nil {
+			PosMgr.Update(int(wp.X), int(wp.Y), int(wp.Cx), int(wp.Cy))
+		}
+
 		if wp.Flags&win.SWP_NOMOVE != 0 && wp.Flags&win.SWP_NOSIZE != 0 {
 			break
 		}
