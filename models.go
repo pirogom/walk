@@ -160,11 +160,22 @@ type TableModel interface {
 // TableModelBase implements the RowsReset and RowChanged methods of the
 // TableModel interface.
 type TableModelBase struct {
+	tv                    *TableView
 	rowsResetPublisher    EventPublisher
 	rowChangedPublisher   IntEventPublisher
 	rowsChangedPublisher  IntRangeEventPublisher
 	rowsInsertedPublisher IntRangeEventPublisher
 	rowsRemovedPublisher  IntRangeEventPublisher
+}
+
+func (tmb *TableModelBase) SetTv(tv *TableView) {
+	tmb.tv = tv
+}
+
+func (tmb *TableModelBase) InvalidateTv() {
+	if tmb.tv != nil {
+		tmb.tv.Invalidate()
+	}
 }
 
 func (tmb *TableModelBase) RowsReset() *Event {
@@ -189,22 +200,27 @@ func (tmb *TableModelBase) RowsRemoved() *IntRangeEvent {
 
 func (tmb *TableModelBase) PublishRowsReset() {
 	tmb.rowsResetPublisher.Publish()
+	tmb.InvalidateTv()
 }
 
 func (tmb *TableModelBase) PublishRowChanged(row int) {
 	tmb.rowChangedPublisher.Publish(row)
+	tmb.InvalidateTv()
 }
 
 func (tmb *TableModelBase) PublishRowsChanged(from, to int) {
 	tmb.rowsChangedPublisher.Publish(from, to)
+	tmb.InvalidateTv()
 }
 
 func (tmb *TableModelBase) PublishRowsInserted(from, to int) {
 	tmb.rowsInsertedPublisher.Publish(from, to)
+	tmb.InvalidateTv()
 }
 
 func (tmb *TableModelBase) PublishRowsRemoved(from, to int) {
 	tmb.rowsRemovedPublisher.Publish(from, to)
+	tmb.InvalidateTv()
 }
 
 // ReflectTableModel provides an alternative to the TableModel interface. It
