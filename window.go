@@ -2469,7 +2469,7 @@ func (wb *WindowBase) WndProc(hwnd win.HWND, msg uint32, wParam, lParam uintptr)
 
 		// PIROGOM
 		wstyle := win.GetWindowLong(hwnd, win.GWL_STYLE)
-		if (int(wstyle)&win.WS_CHILD) == 0 && wp != nil {
+		if wp != nil && (int(wstyle)&win.WS_CHILD) == 0 && (int(wstyle)&win.WS_CAPTION) != 0 {
 			hMon := win.MonitorFromWindow(hwnd, win.MONITOR_DEFAULTTONEAREST)
 			mi := win.MONITORINFO{}
 			mi.CbSize = uint32(unsafe.Sizeof(mi))
