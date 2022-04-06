@@ -15,14 +15,31 @@ var (
 	PosMgr PositionManager
 )
 
+type SavedPosition struct {
+	PosX       int
+	PosY       int
+	Width      int
+	Height     int
+	DeskWidth  int
+	DeskHeight int
+}
+
 /**
 *	PositionManager
 **/
 type PositionManager struct {
 	sync.Mutex
-	PosX, PosY, Width, Height int
-	DeskWidth, DeskHeight     int
-	updated                   bool
+
+	PosX       int
+	PosY       int
+	Width      int
+	Height     int
+	DeskWidth  int
+	DeskHeight int
+
+	updated bool
+
+	SavedPos SavedPosition
 }
 
 /**
@@ -64,4 +81,28 @@ func (p *PositionManager) Get() (x int, y int, w int, h int, dw int, dh int) {
 **/
 func (p *PositionManager) HasPosition() bool {
 	return p.updated
+}
+
+/**
+*	Save
+**/
+func (p *PositionManager) Save() {
+	p.SavedPos.PosX = p.PosX
+	p.SavedPos.PosY = p.PosY
+	p.SavedPos.Width = p.Width
+	p.SavedPos.Height = p.Height
+	p.SavedPos.DeskWidth = p.DeskHeight
+	p.SavedPos.DeskHeight = p.DeskHeight
+}
+
+/**
+*	Restore
+**/
+func (p *PositionManager) Restore() {
+	p.PosX = p.SavedPos.PosX
+	p.PosY = p.SavedPos.PosY
+	p.Width = p.SavedPos.Width
+	p.Height = p.SavedPos.Height
+	p.DeskHeight = p.SavedPos.DeskWidth
+	p.DeskHeight = p.SavedPos.DeskHeight
 }
