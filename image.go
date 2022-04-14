@@ -51,12 +51,6 @@ func ImageFrom(src interface{}) (img Image, err error) {
 	return
 }
 
-// PIROGOM
-// load image from hbitmap
-func NewImageFromHBITMAP(hBmp win.HBITMAP) (Image, error) {
-	return newBitmapFromHBITMAP(hBmp, 96)
-}
-
 // NewImageFromFile loads image from file at 96dpi. Supported types are .ico, .emf, .bmp, .png...
 //
 // Deprecated: Newer applications should use NewImageFromFileForDPI.
