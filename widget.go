@@ -274,6 +274,18 @@ func (wb *WidgetBase) SetMinMaxSize(min, max Size) (err error) {
 	return
 }
 
+func (wb *WidgetBase) FixWidth(width int) error {
+	cs := wb.Size()
+	cs.Width = width
+	return wb.SetMinMaxSize(cs, cs)
+}
+
+func (wb *WidgetBase) FixHeight(height int) error {
+	cs := wb.Size()
+	cs.Height = height
+	return wb.SetMinMaxSize(cs, cs)
+}
+
 // AlwaysConsumeSpace returns if the Widget should consume space even if it is
 // not visible.
 func (wb *WidgetBase) AlwaysConsumeSpace() bool {
