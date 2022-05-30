@@ -250,6 +250,24 @@ func (wv *WebView) SetURL(url string) error {
 	})
 }
 
+/**
+*	SetURLWithAgent
+**/
+func (wv *WebView) SetURLWithAgent(url string, agent string) error {
+	return wv.withWebBrowser2(func(webBrowser2 *win.IWebBrowser2) error {
+		urlBstr := win.StringToVariantBSTR(url)
+		flags := win.IntToVariantI4(0)
+		targetFrameName := win.StringToVariantBSTR("_self")
+		agentBStr := win.StringToVariantBSTR(agent)
+
+		if hr := webBrowser2.Navigate2(urlBstr, flags, targetFrameName, nil, agentBStr); win.FAILED(hr) {
+			return errorFromHRESULT("IWebBrowser2.Navigate2", hr)
+		}
+
+		return nil
+	})
+}
+
 // PIROGOM
 // for disable javascript error alert
 func (wv *WebView) SetSilent() error {
