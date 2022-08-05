@@ -442,6 +442,7 @@ type WindowBase struct {
 	visible                   bool
 	enabled                   bool
 	acc                       *Accessibility
+	disablePosMgr             bool // pirogom
 }
 
 var (
@@ -2321,6 +2322,13 @@ func (wb *WindowBase) handleWMCTLCOLOR(wParam, lParam uintptr) uintptr {
 	return 0
 }
 
+/**
+* DisablePositionMgr , pirogom
+**/
+func (wb *WindowBase) DisablePositionMgr() {
+	wb.disablePosMgr = true
+}
+
 // WndProc is the window procedure of the window.
 //
 // When implementing your own WndProc to add or modify behavior, call the
@@ -2469,16 +2477,18 @@ func (wb *WindowBase) WndProc(hwnd win.HWND, msg uint32, wParam, lParam uintptr)
 
 		// PIROGOM
 		wstyle := win.GetWindowLong(hwnd, win.GWL_STYLE)
-		if wp != nil && (int(wstyle)&win.WS_CHILD) == 0 && (int(wstyle)&win.WS_CAPTION) != 0 {
-			hMon := win.MonitorFromWindow(hwnd, win.MONITOR_DEFAULTTONEAREST)
-			mi := win.MONITORINFO{}
-			mi.CbSize = uint32(unsafe.Sizeof(mi))
-			if win.GetMonitorInfo(hMon, &mi) {
-				deskWidth := mi.RcWork.Left - mi.RcWork.Right
-				deskHeight := mi.RcWork.Bottom - mi.RcWork.Top
-				PosMgr.Update(int(wp.X), int(wp.Y), int(wp.Cx), int(wp.Cy), int(deskWidth), int(deskHeight))
-			} else {
-				PosMgr.Clear()
+		if (int(wstyle)&win.WS_CHILD) == 0 && wp != nil {
+			if !wb.disablePosMgr {
+				hMon := win.MonitorFromWindow(hwnd, win.MONITOR_DEFAULTTONEAREST)
+				mi := win.MONITORINFO{}
+				mi.CbSize = uint32(unsafe.Sizeof(mi))
+				if win.GetMonitorInfo(hMon, &mi) {
+					deskWidth := mi.RcWork.Left - mi.RcWork.Right
+					deskHeight := mi.RcWork.Bottom - mi.RcWork.Top
+					PosMgr.Update(int(wp.X), int(wp.Y), int(wp.Cx), int(wp.Cy), int(deskWidth), int(deskHeight))
+				} else {
+					PosMgr.Clear()
+				}
 			}
 		}
 
