@@ -295,6 +295,10 @@ func (tv *TreeView) resetItems() error {
 	return nil
 }
 
+func(tv *TreeView) UpdateItems() error {
+	return tv.resetItems()
+}
+
 func (tv *TreeView) clearItems() error {
 	if 0 == tv.SendMessage(win.TVM_DELETEITEM, 0, 0) {
 		return newError("SendMessage(TVM_DELETEITEM) failed")
